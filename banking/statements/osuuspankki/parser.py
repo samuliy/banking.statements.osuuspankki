@@ -47,7 +47,7 @@ class OPCsvStatementParser(CsvStatementParser):
        "bank_account_to":6, "refnum":7, "memo":8, "id":9
     }
 
-    date_format = "%d.%m.%Y"
+    date_format = "%Y-%m-%d"
 
     def __init__(self, fin):
         sin=StringIO()
