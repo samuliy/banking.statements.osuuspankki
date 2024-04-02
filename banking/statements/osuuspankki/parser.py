@@ -25,6 +25,7 @@ Saaja/Maksaja;Saajan tilinumero;Viite;Viesti;Arkistotunnus;",
 Saajan tilinumero ja pankin BIC;Viite;Viesti;Arkistointitunnus;",
 "Kirjauspäivä;Arvopäivä;Määrä EUROA;Laji;Selitys;Saaja/Maksaja;\
 Saajan tilinumero ja pankin BIC;Viite;Viesti;Arkistointitunnus",
+'"Kirjauspäivä";"Arvopäivä";"Määrä EUROA";"Laji";"Selitys";"Saaja/Maksaja";"Saajan tilinumero";"Saajan pankin BIC";"Viite";"Viesti";"Arkistointitunnus"',
 )
 
 
