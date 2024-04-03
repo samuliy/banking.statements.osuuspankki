@@ -44,7 +44,7 @@ class OPCsvStatementParser(CsvStatementParser):
     
     mappings = {
        "date":1, "amount":2, "trntype":4, "payee":5,
-       "bank_account_to":6, "refnum":7, "memo":8, "id":9
+       "bank_account_to":6, "refnum":8, "memo":9, "id":10
     }
 
     date_format = "%Y-%m-%d"
