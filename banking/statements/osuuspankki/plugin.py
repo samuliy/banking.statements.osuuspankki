@@ -1,19 +1,14 @@
 # -*- encoding: utf-8 -*-
 from ofxstatement.plugin import Plugin
 from .parser import OPCsvStatementParser, OPCsvStatementParser2021v1, SIGNATURES, SIGNATURES_2021v1
+import chardet
 
 class OPPlugin(Plugin):
     "Suomen Osuuspankki / Finnish Osuuspankki"
 
     def get_parser(self, fin):
-        encoding = 'iso-8859-1'
+        encoding = self.detect_encoding(fin)
         signature = self.get_signature(fin, encoding)
-
-        if signature.startswith('ï»¿'):
-            # Switch to UTF-8 with BOM
-            encoding = 'utf-8-sig'
-            signature = self.get_signature(fin, encoding)
-
         f = open(fin, "r", encoding=encoding)
 
         if signature in SIGNATURES:
@@ -30,6 +25,13 @@ class OPPlugin(Plugin):
 
         # no plugin with matching signature was found
         raise Exception("No suitable Osuuspankki parser found for this statement file.")
+
+    def detect_encoding(self, fin):
+        with open(fin, "rb") as f:
+            content = bytearray(f.read())
+            chardetect = chardet.detect(content)
+            return chardetect['encoding']
+        return None
 
     def get_signature(self, fin, encoding):
         with open(fin, "r", encoding=encoding) as f:

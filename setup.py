@@ -29,7 +29,8 @@ setup(name='banking.statements.osuuspankki',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'ofxstatement'
+          'ofxstatement',
+          'chardet',
       ],
       entry_points="""
           [ofxstatement]
