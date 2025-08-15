@@ -28,6 +28,10 @@ Saajan tilinumero ja pankin BIC;Viite;Viesti;Arkistointitunnus",
 '"Kirjauspäivä";"Arvopäivä";"Määrä EUROA";"Laji";"Selitys";"Saaja/Maksaja";"Saajan tilinumero";"Saajan pankin BIC";"Viite";"Viesti";"Arkistointitunnus"',
 )
 
+SIGNATURES_2021v1 = (
+'"Kirjauspäivä";"Arvopäivä";"Määrä EUROA";"Laji";"Selitys";"Saaja/Maksaja";\
+"Saajan tilinumero";"Saajan pankin BIC";"Viite";"Viesti";"Arkistointitunnus"',
+)
 
 class CustomStatementLine(StatementLine):
     "don't print the check number"
@@ -41,7 +45,7 @@ class CustomStatementLine(StatementLine):
 
 class OPCsvStatementParser(CsvStatementParser):
     "parser for various variations with common field semantics"
-    
+
     mappings = {
        "date":1, "amount":2, "trntype":4, "payee":5,
        "bank_account_to":6, "refnum":8, "memo":9, "id":10
@@ -61,10 +65,47 @@ class OPCsvStatementParser(CsvStatementParser):
         return csv.reader(self.fin, delimiter=';', quotechar='"')
 
     def parse_value(self, value, field):
-       if field == "bank_account_to":
-          return BankAccount("", value)
-       else:
-          return super().parse_value(value, field)
+        if field == "bank_account_to":
+            return BankAccount("", value)
+        else:
+            return super().parse_value(value, field)
+
+    def parse_record(self, line):
+        # Free Headerline
+        if self.cur_record <= 1:
+            return None
+
+        # Change decimalsign from , to .
+        line[2] = line[2].replace(',', '.')
+
+        # Set transaction type
+        line[4] = TRANSACTION_TYPES[line[4]]
+
+        stmt_line = CustomStatementLine()
+        for field, col in self.mappings.items():
+            if col >= len(line):
+                raise ValueError("Cannot find column %s in line of %s items "
+                                 % (col, len(line)))
+            rawvalue = line[col]
+            value = self.parse_value(rawvalue, field)
+            setattr(stmt_line, field, value)
+        return stmt_line
+
+
+class OPCsvStatementParser2021v1(CsvStatementParser):
+    mappings = {
+        "date": 0, "amount": 2, "trntype": 4, "payee": 5,
+        "bank_account_to": 6, "refnum": 8, "memo": 9, "id": 10
+    }
+
+    def split_records(self):
+        return csv.reader(self.fin, delimiter=';', quotechar='"')
+
+    def parse_value(self, value, field):
+        if field == "bank_account_to":
+            return BankAccount("", value)
+        else:
+            return super().parse_value(value, field)
 
     def parse_record(self, line):
         #Free Headerline
@@ -76,6 +117,9 @@ class OPCsvStatementParser(CsvStatementParser):
 
         # Set transaction type
         line[4] = TRANSACTION_TYPES[line[4]]
+
+        # Remove "ref="
+        line[8] = line[8].replace('ref=', '')
 
         stmt_line = CustomStatementLine()
         for field, col in self.mappings.items():
