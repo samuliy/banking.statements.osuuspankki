@@ -31,6 +31,8 @@ Saajan tilinumero ja pankin BIC;Viite;Viesti;Arkistointitunnus",
 SIGNATURES_2021v1 = (
 '"Kirjauspäivä";"Arvopäivä";"Määrä EUROA";"Laji";"Selitys";"Saaja/Maksaja";\
 "Saajan tilinumero";"Saajan pankin BIC";"Viite";"Viesti";"Arkistointitunnus"',
+'"Kirjauspäivä";"Arvopäivä";"Määrä euroa";"Laji";"Selitys";"Saaja/Maksaja";\
+"Saajan tilinumero";"Saajan pankin BIC";"Viite";"Viesti";"Arkistointitunnus"',
 )
 
 class CustomStatementLine(StatementLine):
@@ -79,7 +81,7 @@ class OPCsvStatementParser(CsvStatementParser):
         line[2] = line[2].replace(',', '.')
 
         # Set transaction type
-        line[4] = TRANSACTION_TYPES[line[4]]
+        line[4] = TRANSACTION_TYPES[line[4].upper()]
 
         stmt_line = CustomStatementLine()
         for field, col in self.mappings.items():
@@ -116,7 +118,7 @@ class OPCsvStatementParser2021v1(CsvStatementParser):
         line[2] = line[2].replace(',', '.')
 
         # Set transaction type
-        line[4] = TRANSACTION_TYPES[line[4]]
+        line[4] = TRANSACTION_TYPES[line[4].upper()]
 
         # Remove "ref="
         line[8] = line[8].replace('ref=', '')
