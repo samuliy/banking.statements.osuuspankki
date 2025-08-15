@@ -25,6 +25,7 @@ Saaja/Maksaja;Saajan tilinumero;Viite;Viesti;Arkistotunnus;",
 Saajan tilinumero ja pankin BIC;Viite;Viesti;Arkistointitunnus;",
 "Kirjauspäivä;Arvopäivä;Määrä EUROA;Laji;Selitys;Saaja/Maksaja;\
 Saajan tilinumero ja pankin BIC;Viite;Viesti;Arkistointitunnus",
+'"Kirjauspäivä";"Arvopäivä";"Määrä EUROA";"Laji";"Selitys";"Saaja/Maksaja";"Saajan tilinumero";"Saajan pankin BIC";"Viite";"Viesti";"Arkistointitunnus"',
 )
 
 
@@ -43,10 +44,10 @@ class OPCsvStatementParser(CsvStatementParser):
     
     mappings = {
        "date":1, "amount":2, "trntype":4, "payee":5,
-       "bank_account_to":6, "refnum":7, "memo":8, "id":9
+       "bank_account_to":6, "refnum":8, "memo":9, "id":10
     }
 
-    date_format = "%d.%m.%Y"
+    date_format = "%Y-%m-%d"
 
     def __init__(self, fin):
         sin=StringIO()

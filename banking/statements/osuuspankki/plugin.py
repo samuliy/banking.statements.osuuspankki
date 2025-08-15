@@ -12,7 +12,7 @@ class OPPlugin(Plugin):
     "Suomen Osuuspankki / Finnish Osuuspankki"
 
     def get_parser(self, fin):
-        f = open(fin, "r", encoding='iso-8859-1')
+        f = open(fin, "r", encoding='utf-8')
         signature = f.readline().strip()
         f.seek(0)
         if signature in SIGNATURES:
