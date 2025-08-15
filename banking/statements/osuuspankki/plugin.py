@@ -12,10 +12,6 @@ class OPPlugin(Plugin):
         f = open(fin, "r", encoding=encoding)
 
         if signature in SIGNATURES:
-            parser = OPCsvStatementParser(f)
-            parser.statement.account_id = self.settings['account']
-            parser.statement.currency = self.settings['currency']
-            parser.statement.bank_id = self.settings.get('bank', 'Osuuspankki')
             return self.with_settings(OPCsvStatementParser(f))
 
         if signature in SIGNATURES_2021v1:
